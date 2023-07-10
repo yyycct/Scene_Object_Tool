@@ -291,7 +291,8 @@ namespace SceneObjectTool
             Seat = 2,
             ItemInteraction = 5,
             AppointmentInteraction = 6,
-            VideoCharInteraction = 7
+            VideoCharInteraction = 7,
+            HouseSaleInteraction = 8
         }
         public string name;
         public InteractionTypes ID;
