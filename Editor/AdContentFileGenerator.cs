@@ -121,6 +121,12 @@ namespace SceneObjectTool
     [CustomEditor(typeof(AdContentFileGenerator))]
     public class AdContentFileGeneratorEditor : Editor
     {
+        SerializedProperty fileName;
+
+        void OnEnable()
+        {
+            fileName = serializedObject.FindProperty("nameOfFile");
+        }
         public override void OnInspectorGUI()
         {
 
@@ -136,7 +142,7 @@ namespace SceneObjectTool
             EditorGUILayout.BeginVertical("HelpBox");
             GUILayout.Label("Define the name of this configuration file, if for Template, the file name should be Scene Addressable UUID, if for customer, the file name should be customer UUID", EditorStyles.wordWrappedMiniLabel);
             EditorGUILayout.EndVertical();
-            adContent.nameOfFile = EditorGUILayout.TextField("File Name", adContent.nameOfFile);
+            fileName.stringValue= EditorGUILayout.TextField("File Name", adContent.nameOfFile);
             if (GUILayout.Button("Generate A New UUID for New Customer"))
             {
                 //generateObject.NewUUID = System.Guid.NewGuid().ToString();
@@ -151,6 +157,7 @@ namespace SceneObjectTool
             }
             textStyle.wordWrap = true;
             EditorGUILayout.TextArea(adContent.GeneratedObjectFile, textStyle);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

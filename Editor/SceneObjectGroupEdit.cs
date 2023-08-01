@@ -62,6 +62,16 @@ namespace SceneObjectTool
                 }
             }
         }
+        public void ToggleAllGrandChildGameObject(bool enable)
+        {
+            foreach (Transform child in transform)
+            {
+                if (child.gameObject.GetComponent<SceneObjectTool>() != null)
+                {
+                    child.gameObject.GetComponent<SceneObjectTool>().ToggleAllChildObejct(enable);
+                }
+            }
+        }
     }
     [CustomEditor(typeof(SceneObjectGroupEdit))]
     public class SceneObjectGroupEditer : Editor
@@ -89,6 +99,14 @@ namespace SceneObjectTool
             if (GUILayout.Button("Add For All"))
             {
                 edit.AddInfoForAll();
+            }
+            if (GUILayout.Button(new GUIContent("Disable All Child Gameobject", "Use this disable all Child Gameobject under each scene object parent")))
+            {
+                edit.ToggleAllGrandChildGameObject(false);
+            }
+            if (GUILayout.Button(new GUIContent("Enable All Child Gameobject", "Use this Enable all Child Gameobject under each scene object parent")))
+            {
+                edit.ToggleAllGrandChildGameObject(true);
             }
             GUILayout.Label("Child Object Overview");
 

@@ -8,8 +8,16 @@ namespace SceneObjectTool
 {
     public class GenerateObjectConfigFile : MonoBehaviour
     {
-        
 
+        public enum TransportationTypes
+        {
+            Drone = 0,
+            Bike = 1,
+            Scooter = 2,
+            Jeep = 3,
+            Horse = 4,
+            Car = 5
+        }
         [HideInInspector]
         public string GeneratedObjectFile;
         public Dictionary<string, object> fileToGenerate = new Dictionary<string, object>();
@@ -30,7 +38,7 @@ namespace SceneObjectTool
         public List<string> loadingImageURL = new List<string>();
 
         [Header("Transportation Types")]
-        public List<string> transportationTypes = new List<string>();
+        public List<TransportationTypes> transportationTypes = new List<TransportationTypes>();
         public string GenerateEntrieObjectConfigFile()
         {
             fileToGenerate.Clear();
@@ -68,7 +76,8 @@ namespace SceneObjectTool
             }
             fileToGenerate.Add("interaction_target_info", GenerateInteractionSection());
             fileToGenerate.Add("loading_image_info", loadingImageURL);
-            fileToGenerate.Add("transportation_type_info", transportationTypes);
+
+            fileToGenerate.Add("transportation_type_info", GenerateTransportationTypes());
             fileToGenerate.Add("skyboc_info", skyboxName);
             result = Newtonsoft.Json.JsonConvert.SerializeObject(fileToGenerate);
 
@@ -235,6 +244,16 @@ namespace SceneObjectTool
 
             return temp;
         }
+        public List<int> GenerateTransportationTypes()
+        {
+            List<int> temp = new List<int>();
+            foreach (TransportationTypes target in transportationTypes)
+            {
+                temp.Add((int)target);
+            }
+
+            return temp;
+        }
 
         public string GetNewUUID()
         {
@@ -252,6 +271,12 @@ namespace SceneObjectTool
     [CustomEditor(typeof(GenerateObjectConfigFile))]
     public class GenerateObjectConfigFileEditor : Editor
     {
+        SerializedProperty fileName;
+        
+        void OnEnable()
+        {
+            fileName = serializedObject.FindProperty("nameOfFile");
+        }
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
@@ -263,7 +288,7 @@ namespace SceneObjectTool
                 EditorGUILayout.BeginVertical("HelpBox");
                 GUILayout.Label("Define the name of this configuration file, if for Template, the file name should be Scene Addressable UUID, if for customer, the file name should be customer UUID", EditorStyles.wordWrappedMiniLabel);
                 EditorGUILayout.EndVertical();
-                generateObject.nameOfFile = EditorGUILayout.TextField("File Name", generateObject.nameOfFile);
+                fileName.stringValue = EditorGUILayout.TextField("File Name", generateObject.nameOfFile);
                 if (GUILayout.Button("Generate A New UUID for New Customer"))
                 {
                     //generateObject.NewUUID = System.Guid.NewGuid().ToString();
@@ -279,7 +304,7 @@ namespace SceneObjectTool
             }
             textStyle.wordWrap = true;
             EditorGUILayout.TextArea(generateObject.GeneratedObjectFile, textStyle);
-
+            serializedObject.ApplyModifiedProperties();
         }
     }
 
@@ -297,5 +322,6 @@ namespace SceneObjectTool
         public string name;
         public InteractionTypes ID;
     }
+
 }
 #endif

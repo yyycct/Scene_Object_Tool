@@ -1,6 +1,6 @@
 {
   "name": "com.i3m.sceneobjecttool",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "displayName": "Scene Object Tool",
   "description": "For managing and generateing config for dynamic objects",
   "unity": "2021.3",

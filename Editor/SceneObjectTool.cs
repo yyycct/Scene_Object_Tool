@@ -188,16 +188,15 @@ namespace SceneObjectTool
         }
         public void DeleteAllChildObejct()
         {
-            foreach (Transform child in transform)
-            {
-                DestroyImmediate(child.gameObject);
-            }
+            for (int i = transform.childCount; i > 0; i--)
+                DestroyImmediate(transform.GetChild(0).gameObject);
         }
-        public void DisableAllChildObejct()
+
+        public void ToggleAllChildObejct(bool enable)
         {
             foreach (Transform child in transform)
             {
-                child.gameObject.SetActive(false);
+                child.gameObject.SetActive(enable);
             }
         }
         public void ChangeAllCatIDAndUUID(string catid)
@@ -279,7 +278,11 @@ namespace SceneObjectTool
             }
             if (GUILayout.Button(new GUIContent("Disable All Child Gameobject", "Use this disable all Child Gameobject from this object")))
             {
-                sceneObjectTool.DisableAllChildObejct();
+                sceneObjectTool.ToggleAllChildObejct(false);
+            }
+            if (GUILayout.Button(new GUIContent("Enable All Child Gameobject", "Use this Enable all Child Gameobject from this object")))
+            {
+                sceneObjectTool.ToggleAllChildObejct(true);
             }
             GUILayout.Space(10);
             GUIStyle textStyle = EditorStyles.label;
@@ -309,6 +312,7 @@ namespace SceneObjectTool
             }
             sceneObjectTool.readJsonInput = GUILayout.TextField(sceneObjectTool.readJsonInput);
             EditorGUILayout.LabelField(sceneObjectTool.readJsonMessage);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 
